@@ -29,7 +29,38 @@ pipeline {
  stage('Create Bridge') {
  
  steps {
- echo "Create Bridge"
+	 script{
+	 job("new-test-pipe") {
+       
+  if("${slackNotify}" == 'Yes'){
+  configure { project ->
+    project / publishers << 'jenkins.plugins.slack.SlackNotifier' {
+				//authToken(String value)
+         		baseUrl("https://jenkinsboard.slack.com/services/hooks/jenkins-ci/")
+				authTokenCredentialId(authCredId)
+         		authToken(xQEd8zCk3Dyp1bSCLCsTp62V)
+     			room("#cisco-pipeline")
+         
+				//botUser(boolean value)
+				  commitInfoChoice('AUTHORS_AND_TITLES')
+				//customMessage(String value)
+				//includeCustomMessage(boolean value)
+				//includeTestSummary(boolean value)
+                startNotification(startNotification.toBoolean())
+                notifyAborted(notifyAborted.toBoolean())
+                notifyBackToNormal(notifyBackToNormal.toBoolean())
+         		notifyFailure(notifyFailure.toBoolean())
+                notifyNotBuilt(notifyNotBuilt.toBoolean())
+                notifyRegression(notifyRegression.toBoolean())
+                notifyRepeatedFailure(notifyRepeatedFailure.toBoolean())
+                notifySuccess(notifySuccess.toBoolean())
+                notifyUnstable(notifyUnstable.toBoolean())
+           		teamDomain("${teamDomain}")
+			}
+    }
+  }
+}
+	 }
  }
 		
 		}	
